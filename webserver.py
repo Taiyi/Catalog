@@ -139,8 +139,8 @@ def itemJSON(category_id, item_id):
 
 @app.route('/category/JSON')
 def categoryJSON():
-    categories = session.query(Category).all()
-    return jsonify(categories=[c.serialize for c in catagories])
+    allCategories = session.query(Category).all()
+    return jsonify(categories=[c.serialize for c in allCatagories])
 
 # User Functions
 def createUser(login_session):
@@ -255,7 +255,6 @@ def deleteCategory(category_id):
     else:
         return render_template(
             'deleteCategory.html', category=categoryToDelete)
-
 
 
 # Show a item
