@@ -140,7 +140,7 @@ def itemJSON(category_id, item_id):
 @app.route('/category/JSON')
 def categoryJSON():
     allCategories = session.query(Category).all()
-    return jsonify(categories=[c.serialize for c in allCatagories])
+    return jsonify(categories=[c.serialize for c in allCategories])
 
 # User Functions
 def createUser(login_session):
@@ -221,12 +221,12 @@ def newCategory():
 # Edit a category
 @app.route('/category/<int:category_id>/edit/', methods=['GET', 'POST'])
 def editCategory(category_id):
-    editedCategory = session.query(
-        Category).filter_by(id=category_id).one()
     if 'username' not in login_session:
         return redirect('/login')
     if editedCategory.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized to edit this category. Please create your own category in order to edit.');}</script><body onload='myFunction()''>"
+    editedCategory = session.query(
+        Category).filter_by(id=category_id).one()
     if request.method == 'POST':
         if request.form['name']:
             editedCategory.name = request.form['name']
@@ -240,12 +240,12 @@ def editCategory(category_id):
 # Delete a category
 @app.route('/category/<int:category_id>/delete/', methods=['GET', 'POST'])
 def deleteCategory(category_id):
-    categoryToDelete = session.query(
-        Category).filter_by(id=category_id).one()
     if 'username' not in login_session:
         return redirect('/login')
     if categoryToDelete.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized to delete this category. Please create your own category in order to delete.');}</script><body onload='myFunction()''>"
+    categoryToDelete = session.query(
+        Category).filter_by(id=category_id).one()
     if request.method == 'POST':
         session.delete(categoryToDelete)
         flash('%s Successfully Deleted' % categoryToDelete.name)
